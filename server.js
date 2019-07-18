@@ -12,24 +12,24 @@ app.use(express.urlencoded({
 }));
 
 app.post('/', (req, res, next) => {
-  for (body in req.body) {
-    app.post(body.url, (req, res) => {
-      console.log(req.body);
+  req.body.forEach(config => {
+    app.post(config.url, (req, res) => {
+      io.sockets
+      res.status(200).send({
+        socket: config.socket,
+      });
     });
-  }
-  res.status(201).json(req.body);
-});
+    io.of(config.url).on('connection', (socket) => {
+      console.log(`Socket conectado: ${socket.id}`);
 
-let tokens = [];
-
-io.on('connection', socket => {
-  console.log(`Socket conectado: ${socket.id}`)
-
-  socket.on('generateToken', () => {
-    const token = crypto.createHash('sha1').update(Date.now().toString()).digest('hex');
-    tokens.push(token);
-    io.sockets.emit('token', token);
+      socket.on('generateToken', () => {
+        const token = crypto.createHash('sha1').update(Date.now().toString()).digest('hex');
+        tokens.push(token);
+        io.sockets.emit('token', token);
+      });
+    });
   });
+  res.status(201).json(req.body);
 });
 
 server.listen(3000);
