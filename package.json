@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "node server.js"
+    "server": "nodemon --exec babel-node server.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,11 @@
   "dependencies": {
     "ejs": "^2.6.2",
     "express": "^4.17.1",
-    "socket.io": "^2.2.0"
+    "nodemon": "^2.0.3",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1"
   }
 }
